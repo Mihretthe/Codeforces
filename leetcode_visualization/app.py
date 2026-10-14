@@ -5,9 +5,6 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-# Force Graphviz PATH (adjust if your install path is different)
-os.environ["PATH"] += os.pathsep + r"C:\Program Files\Graphviz\bin"
-
 from graphviz import Digraph
 
 app = FastAPI(title="Balanced Binary Tree Visualizer")
@@ -82,7 +79,20 @@ async def visualize(
             # Convert to list of integers for the tree
             bit_list = [int(c) for c in generated_bits]
 
+
+
             root = build_tree(bit_list)
+            val = 1
+            def inorder(root):
+                nonlocal val
+                if not root:
+                    return
+                
+                inorder(root.left)
+                root.val = val
+                val += 1
+                inorder(root.right)
+            inorder(root)
             if not root:
                 error = "Could not build tree from generated bits"
 
